@@ -5,21 +5,40 @@ import java.io.Serializable;
 import java.time.LocalDate;
 
 /**
- * Ez az összetett osztly amely az egyes Dokumentumok tárolását vaéósítja meg
+ * Ez az összetett osztály amely az egyes Dokumentumok tárolását vaéósítja meg
+ * Implementálja a serializable függvényt ezáltal kimenthetõek és visszatölthetõek lesznek az adatai.
  * @author nagyerik99
  *
  */
 public class Document implements Serializable{
 	private static final long serialVersionUID = 1L;
+	/**
+	 * a Dokumentum neve/azonosítója
+	 */
 	private String docName;
+	/**
+	 * a Dok. típusa
+	 */
 	private String docType;
+	/**
+	 * a Dokumnetum/szerzõdés kezdete.
+	 * @see LocalDate
+	 */
 	private LocalDate fromDate;
+	/**
+	 * A Dok./Szerzõdés vége.
+	 * @see LocalDate
+	 */
 	private LocalDate toDate;
+	/**
+	 * A Dok.hoz csatolt fájl.
+	 * @see File
+	 */
 	private File attachedFile;
 	
 	/**
 	 * A Document osztály default konstruktora amely a Dokumentum objektum létrehozásáért felel
-	 * Elmenti az adatokat és csatolja a fájlt az objektumhoz
+	 * Elmenti az adatokat és csatolja a fájlt az objektumhoz, ha van fájl
 	 * @param input az eltárolandó adat string tömbbként
 	 */
 	public Document(String[] input){
@@ -82,7 +101,7 @@ public class Document implements Serializable{
 	protected Object[] toObjectArray() {
 		String filename = null; 
 		Object[] result;
-		if(attachedFile != null) {
+		if(this.containsFile()) {
 			filename = attachedFile.getName();
 		}
 		else {
@@ -106,12 +125,14 @@ public class Document implements Serializable{
 	}
 	
 	/**
-	 * Megnyitja a csatolt fájlt
+	 * Megnyitja a csatolt fájlt, ha van.
 	 * @param desktop Dektop az asztalt reprezentáló objektum
-	 * @throws Exception ha nem tudja megnyitni a dokuemntumot -> nincs csatolány
+	 * @throws Exception ha nem tudja megnyitni a dokuemntumot <-> nincs csatolány
+	 * @see Desktop
+	 * @see Exception
 	 */
 	protected void openDoc(Desktop desktop) throws Exception {
-		if(!containsFile()) {
+		if(!this.containsFile()) {
 			throw new Exception("A Dokumentumhoz, nincs csatolt fájl!");
 		}else {
 			desktop.open(attachedFile);
@@ -119,7 +140,7 @@ public class Document implements Serializable{
 	}
 	
 	/**
-	 * Kiiratás ellenõrzésre használtam
+	 * Kiírja a dokumentum adatait string-ként.
 	 */
 	public String toString() {
 		return docName+" "+docType+" "+fromDate+" "+toDate;

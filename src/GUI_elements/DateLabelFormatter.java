@@ -6,11 +6,23 @@ import java.util.Date;
 
 import javax.swing.JFormattedTextField.AbstractFormatter;
 
+/**
+ * 
+ * @author nagye
+ *
+ */
 public class DateLabelFormatter extends AbstractFormatter {
 	private static final long serialVersionUID = 1L;
-	
+	/**
+	 * a formázás patternje
+	 */
 	private String pattern ="yyyy-MM-dd";
+	/**
+	 * a formázó amely a formázást végzi a pattern mintájára
+	 */
 	private SimpleDateFormat formatter = new SimpleDateFormat(pattern);
+	
+	
 	@Override
 	public Object stringToValue(String text) throws ParseException {
 		return formatter.parseObject(text);
@@ -25,17 +37,27 @@ public class DateLabelFormatter extends AbstractFormatter {
 		return "";
 	}
 	
-	public Date formatDate(String from) {
+	/**
+	 * Date típusúra formázza a kapott String-et
+	 * @throws ParseException ha a formázás sikertelen
+	 * @param from a formázandó dátum String formátumban
+	 * @return Date típusú formázott érték
+	 * @see ParseException
+	 */
+	public Date formatDate(String from) throws ParseException {
 		Date result=null;
-		try {
-			result = formatter.parse(from);
-		}catch(ParseException e) {
-			e.printStackTrace();
-		}
+		result = formatter.parse(from);
 		return result;
 	}
 	
-	public boolean isValidDateInterval(String from, String to){
+	/**
+	 * Checkolja, hogy a kapott két dátum valid intervallumot határoz-e meg.
+	 * @param from a kezdés dátuma String-ként meghatározva.
+	 * @param to a befejezés dátuma String-ként meghatározva.
+	 * @return Igaz, ha valid az intervallum, egyébként hamis
+	 * @throws ParseExcepton ha a formázás nem sikerült.
+	 */
+	public boolean isValidDateInterval(String from, String to) throws ParseException{
 		if(from.isEmpty() || to.isEmpty()) return false;
 		
 			Date fromDate = this.formatDate(from);

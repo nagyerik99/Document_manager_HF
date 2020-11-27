@@ -12,19 +12,70 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import Logical_elements.DocumentFilterer;
 
+/**
+ * A szûrés panel amely a modellben lévõ adatok szûrését valósítja meg.
+ * Összerakja a grafikus formáját a panelnek, és actionListener-rel figyeli
+ * az egyes szûrési feltételek változását
+ * @author nagyerik99
+ * @see JPanel
+ *
+ */
 public class FilterPanel extends JPanel{
 	private static final long serialVersionUID = 1L;
+	/**
+	 * a keresõ mezõk
+	 */
 	private JTextField name,type,fromDate,toDate;
+	/**
+	 * A keresõ mezõkhöz tartozó szöveges megnevezés a vizuális felismerhetõség végett.
+	 */
 	private JLabel nameLabel,typeLabel,fromDateLabel,toDateLabel;
+	/**
+	 * a keresõ mezõket és a hozzájuk tartozó labeleket tároló panelek
+	 * a vizuális megjelenítésre kellenek
+	 */
 	private JPanel namePanel,typePanel,fromDatePanel,toDatePanel;
+	/**
+	 * Az adatokat/dokumnetumokat tároló tábla
+	 * @see DocumnetTable
+	 */
 	private DocumentTable docTable;
-	private Database_frame mainFrame;
+	/**
+	 * A main Ablak
+	 * @see DatabaseFrame
+	 */
+	private DatabaseFrame mainFrame;
+	/**
+	 * A szûrõt osszeállító objektum
+	 * @see DocumentFilterer
+	 */
 	private DocumentFilterer filterer;
-	private static String dateToolTipText = "Dátum: yyyy/MM/dd vagy yyyy.MM.dd Intervallum: Két dátum kötõjellel elválasztva";
+	/**
+	 * Tooltip a dátum mezõkhöz tartozó labeleknek, hogy a felhasználó útmutatást kapjon
+	 * a várt fromátumokról.
+	 */
+	private static String dateToolTipText = "Dátum: 'yyyy/MM/dd' vagy 'yyyy.MM.dd' \n"
+			+ "Intervallum: Két azonos formátumú dátum kötõjellel elválasztva";
+	/**
+	 * formai igazítása a labeleknek
+	 */
 	private int	labelAlignment = JLabel.LEFT;
+	/**
+	 * betûszín
+	 */
 	private static Color foreGroundColor = new Color(210,241,250);
+	/**
+	 * háttérszín
+	 */
 	private static Color backGroundColor;
-	public FilterPanel(Database_frame main,DocumentTable table) {
+	
+	/**
+	 * Default konstruktor.
+	 * Létrehozza és inicializálja a szükséges elemket, a filtert, es formázza a panelt
+	 * @param main
+	 * @param table
+	 */
+	public FilterPanel(DatabaseFrame main,DocumentTable table) {
 		docTable = table;
 		mainFrame = main;
 		filterer = new DocumentFilterer();
@@ -95,30 +146,63 @@ public class FilterPanel extends JPanel{
 		this.add(toDatePanel);
 	}
 	
+	/**
+	 * Beállítja aszíneket a kapott komponensnek
+	 * @see JComponent
+	 * @param comp a kapott komponens
+	 */
 	private void setBackAndForeGround(JComponent comp) {
 		comp.setBackground(backGroundColor);
 		comp.setForeground(foreGroundColor);
 	}
 	
+	/**
+	 * Beállítja a layout-ot és a formázást a paneleknek
+	 * @param panel a formázandó panel
+	 * @param top igazítás fent
+	 * @param left igazítás balra
+	 * @param bottom igazítás lent
+	 * @param right igazítás jobbra
+	 * @param AXIS a layout iránya/eloszlása
+	 */
 	private void setLayoutToPanel(JPanel panel,int top,int left,int bottom, int right,int AXIS) {
 		panel.setLayout(new BoxLayout(panel,AXIS));
 		panel.setBorder(new EmptyBorder(top,left,bottom,right));
 	}
 	
+	/**
+	 * Inicializálja a paraméterként kapott labelt
+	 * @param label a formázandó label
+	 * @param ToolTipText "good to know" szöveg / ha van
+	 */
 	private void defineLabel(JLabel label,String ToolTipText) {
 		this.setBackAndForeGround(label);
 		if(ToolTipText!=null) label.setToolTipText(ToolTipText);
 	}
 	
+	/**
+	 * beállítja a paraméterként kapott textfield-et
+	 * @param textField formázandó field
+	 * @param listener Action listener amit az adott fieldhez kell adni
+	 * @see ActionListener
+	 */
 	private void defineTextField(JTextField textField, ActionListener listener) {
 		textField.setHorizontalAlignment(labelAlignment);
 		this.setBackAndForeGround(textField);
 		textField.addActionListener(listener);
 	}
 	
+	/**
+	 * Belsõ osztály ami implementálja az ActionListenr interface-t 
+	 * A mezõ változásakor, ami enter leütést jelöl , hívódik meg és illeszti össze a filterer segítségével
+	 * a szûrendõ adatokat majd átadja a táblának szûrésre.
+	 * @author nagyerik99
+	 *
+	 */
 	private class FilterAction implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e) {
+
 			filterer.clearFilterer();
 			String nameText = name.getText();
 			String typeText = type.getText();

@@ -15,16 +15,27 @@ import java.util.TreeMap;
 import javax.swing.table.DefaultTableModel;
 
 /**	
- * Ez a DefaultTable modell reprezentációja
+ * Ez az osztály valósítja meg a DefaultTableModel-t vagyi a DocumentTable által
+ * használt modellt.
+ * @see DocumentTable
  * @author nagyerik99
- * belsõ attribuútuma egy HashTable ami a betöltött aktív dokumentumokat tárolja
- * és a DocumentumTable modellje
  */
 public class DocumentTableModel extends DefaultTableModel{
-	private HashMap<String,Document> DocList;
 	private static final long serialVersionUID = 1L;
+	/**
+	 * az a belsõ lista amely a hozzáadtott Dokumnetumokat tárolja és ez alapján rakja össze
+	 * megjelenítendõ modellt sorait az osztály.
+	 * Key : string ami az adott dokumnetum azonosítója neve. ez alapján gyorsan és könnyen meglehet találni a tartalmazott adatot.
+	 */
+	private HashMap<String,Document> DocList;
+	/**
+	 * a modell header-je 
+	 */
 	private static Object[] header = {"ID","Típus","Kezdete","Vége","Fájl"};
 	
+	/**
+	 * Default konstruktor ami létrehozza a modellt és inicializálja a Doclist-et
+	 */
 	public DocumentTableModel() {
 		super(header,0);
 		DocList = new HashMap<String,Document>();
@@ -40,10 +51,10 @@ public class DocumentTableModel extends DefaultTableModel{
 	}
 	/**
 	 * A Dokumentum szerkesztésénél hívódik meg, az új dokumentumot hozzáadja a listához és a modellhez a régit pedig törli
-	 * @param newDoc
-	 * @param viewRowID
-	 * @param oldID
-	 * @throws Exception
+	 * @param newDoc a felvevendõ dokumentum
+	 * @param viewRowID a modell ViewModelljének a dokumentumhoz tartozó id-ja
+	 * @param oldID a régi dokumentum id-ja/neve
+	 * @throws Exception ha nem találta meg az oldID alapján az adott elemet, vagyis nincs a listában
 	 */
 	public void editRow(Document newDoc, int viewRowID, String oldID) throws Exception {
 		String docID = newDoc.getDocID();
@@ -57,8 +68,9 @@ public class DocumentTableModel extends DefaultTableModel{
 	
 	/**
 	 * Visszaadja az adott Documentumot ami a modellben kiválasztva szerepel
-	 * @param docID
-	 * @return
+	 * @param docID  a kiválasztott dokumentum neve/id ja
+	 * @return Document a kiválasztott dokumentum
+	 * @see Document
 	 */
 	public Document getRowData(String docID){
 		return (DocList.get(docID));
@@ -66,9 +78,9 @@ public class DocumentTableModel extends DefaultTableModel{
 	
 	/**
 	 * Kitörli a megfelelõ sort a modellbõl és a listából is
-	 * @param rowID
-	 * @param row
-	 * @throws NullPointerException
+	 * @param rowID a dokumentum azoosítója
+	 * @param row a modell sorAzonosítója
+	 * @throws NullPointerException ha nem található a modellben a dokumentum
 	 */
 	public void removeSelectedRow(String rowID,int row) throws NullPointerException {
 		DocList.remove(rowID);
@@ -86,26 +98,26 @@ public class DocumentTableModel extends DefaultTableModel{
 	}
 	/**
 	 * A modellben kiválasztott elemre kétszer kattintva meghívódik a DocumentTable-ön keresztül
-	 * @param docID
-	 * @param desktop
-	 * @throws Exception
-	 * @throws NullPointerException
+	 * megnyitja a csatolt fájlt / ha van olyan
+	 * @param docID a dokumentum azonosítója
+	 * @param desktop az asztalt jelképezõ objektum
+	 * @throws Exception ha nincs csatolt állomány
 	 */
-	public void openDoc(String docID,Desktop desktop) throws Exception,NullPointerException {
+	public void openDoc(String docID,Desktop desktop) throws Exception {
 		if(docID==null) return;
 		
 		Document selectedDocument = DocList.get(docID);
 		if(selectedDocument == null) {
-			throw new NullPointerException("Hiba az állomány nem található");
+			throw new Exception("Hiba az állomány nem található");
 		}else {
 			selectedDocument.openDoc(desktop);
 		}
 	}
 	
 	/**
-	 * A Lista tartalmát tudjuk kimenteni .ser típusú fájlba
-	 * @param savedFile
-	 * @throws IOException
+	 * A Lista tartalmát tudjuk kimenteni a megadott fájlba
+	 * @param savedFile a fájl absolutepath ja
+	 * @throws IOException  ha valmilyen oknál fogva nem sikerült volna a fájlba írás.
 	 */
 	public void saveFile(String savedFile) throws IOException {
 		FileOutputStream save = new FileOutputStream(savedFile);
@@ -116,10 +128,10 @@ public class DocumentTableModel extends DefaultTableModel{
 	}
 	
 	/**
-	 * .ser típusú fájlokat szérializál be a Listának amelybõl aztán létrehozza a megjelenítésre használt modellt is.
-	 * @param loadFile
-	 * @throws IOException
-	 * @throws ClassNotFoundException
+	 * Megpróbálja betölteni szérializálni a megadott fájlt, amit betölt a listába és a modellbe is.
+	 * @param loadFile a betöltendõ fájl path-je
+	 * @throws IOException ha nem sikerült a betöltés
+	 * @throws ClassNotFoundException ha a kasztolás sikertelen volt
 	 */
 		@SuppressWarnings("unchecked")
 	public void loadFile(String loadFile) throws IOException,ClassNotFoundException{
@@ -134,8 +146,8 @@ public class DocumentTableModel extends DefaultTableModel{
 	}
 	
 		/**
-		 * a loadFile hivja meg ez fogja majd updateelni a modellt amelyet a Table használ
-		 * @param map
+		 * frissíti/fellül írja a listát és a modellt is.
+		 * @param map a betöltött állomány
 		 */
 	private void updateModel(Map<String,Document> map) {
 		Iterator<Entry<String, Document>> iterator = map.entrySet().iterator();
@@ -148,8 +160,8 @@ public class DocumentTableModel extends DefaultTableModel{
 	
 	/**
 	 * A modell egy sorának megváltozott/szerkesztett sorának értékét frissíti
-	 * @param rowID
-	 * @param doc
+	 * @param rowID a változtatott sor id-je
+	 * @param doc a megváltozott Dokumentum
 	 */
 	private void updateRow(int rowID, Document doc) {
 		Object[] data = doc.toObjectArray();
@@ -163,14 +175,18 @@ public class DocumentTableModel extends DefaultTableModel{
 	/**
 	 * vissza adja,hogy van e a wannabeID hoz hasonló
 	 * az adat szerkesztés és létrehozás viszgálatához kell.
-	 * @param wannabeID
-	 * @return boolean
+	 * @param wannabeID a vizsgálandó id
+	 * @return Igaz, ha van már hozzá hasonló id
 	 */
 	public boolean idMatch(String wannabeID) {
 		return DocList.containsKey(wannabeID);
 	}
 	
+	/**
+	 * osztály vizsgálat ami a filter kiértékelésnél szükséges.
+	 */
 	
+	@Override
 	public Class<?> getColumnClass(int column){
 		switch(column) {
 		case 2:

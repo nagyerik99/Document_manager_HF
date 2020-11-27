@@ -17,21 +17,66 @@ import org.jdatepicker.impl.*;
 
 import Logical_elements.Document;
 
+/**
+ * @author nagyerik99
+ * @JDialog típusú osztály, amely az adatok felvételének/szerkesztésének vizuális megjelenítéséért felel.
+ */
 public class AddFrame extends JDialog{
 	private static final long serialVersionUID = 1L;
-	private static ImageIcon icon = new ImageIcon("D:\\Files and Stuffs\\Eclipse_workspace\\Document_manager_HF\\view\\addFile.png");
+	/**
+	 * típusú nyomógombok a mentés,kilépés, és fájlválasztó megnyitására
+	 */
 	private JButton save,cancel,addFile;
+	/**
+	 * típus panelek a megjelenítés formázására.
+	 */
 	private JPanel centerPanel,labelPanel,buttonPanel,helpFilePanel;
+	/**
+	 * Beviteli mezõ
+	 */
 	private JTextField name, type;
+	/*
+	 * jdatepicker jar fájl belsõ osztálya.
+	 * A dátum kiválasztása grafikusan.
+	 */
 	private JDatePickerImpl fromDatePicker, toDatePicker;
+	/**
+	 * jdatepicker jar fájl belsõ osztálya.
+	 * A kiválasztott dátum megjelenítését végzi.
+	 */
 	private JDatePanelImpl  fromDatePanel, toDatePanel;
+	/**
+	 * a csatolandó fájl kiválasztására fájlválasztó
+	 */
 	private JFileChooser fileChooser;
+	/**
+	 *  kiválasztott fájl pathja, ha van csatova egyébként null
+	 */
 	private String selectedFile;
+	/**
+	 * 	jdatepicker jar fájl belsõ osztálya.
+	 *  A dátumválasztó mezõk értékéhez modell.
+	 */
 	private UtilDateModel fromDateModel,toDateModel;
+	/**
+	 * label a szöveges tájékoztatás megjelenítésére
+	 */
 	private JLabel fileLabel,nameLabel,typeLabel,fromDateLabel,toDateLabel, selFileLabel;
-	
-	private Database_frame mainFrame;
+	/**
+	 * A main Ablak
+	 * @see DatabaseFrame
+	 */
+	private DatabaseFrame mainFrame;
+	/**
+	 * A Dokumentumok megjelenítését végzõ tábla
+	 * @see DocumentTable
+	 */
 	private DocumentTable docTab;
+	/**
+	 * statikus szöveg tag:
+	 * @oldID a Szerkesztés esetén betöltött dokumnetum azonosítója
+	 * @req a megjelenítendõ szöveg kötelezõ kitöltés esetén.
+	 */
 	private String oldID,req="Kötelezõen Kitöltendõ mezõ!";
 	private static Color 
 			backGroundColor,
@@ -41,18 +86,19 @@ public class AddFrame extends JDialog{
 	
 	/**
 	 * A JDialog típusú AddFrame osztály konstruktora
-	 * @param main a Fõ ablak(Database_frame)
-	 * @param table  DocumentTable típusú változó az Adatokat tároló Táblázat
-	 * @param toEdit boolean típusú változó amely meghatározza, hogy szerkesztésre vagy új elem létrehozására lesz az ablak inicializálva
+	 * létrehozza a dialog ablakot és a hozzátartozó elemeket a meghatározott forma szerint.
+	 * @param main @Database_frame típúsú fõablak referenciája
+	 * @param table @DocumentTable típusú változó az Adatokat tároló Táblázat
+	 * @param toEdit @boolean típusú változó amely meghatározza, hogy szerkesztésre vagy új elem létrehozására lesz az ablak inicializálva
 	 */
-	public AddFrame(Database_frame main, DocumentTable table, boolean toEdit){
+	public AddFrame(DatabaseFrame main, DocumentTable table, boolean toEdit){
 		super(main,"Új elem hozzáadása",true);
 		docTab=table;
 		mainFrame=main;
 		backGroundColor=mainFrame.getBackground();
 		
 		//Dialog alapparaméterek beállítása
-		this.setIconImage(icon.getImage());
+		this.setIconImage(DefaultPaths.AddIcon.getImage());
 		this.setPreferredSize(new Dimension(450,250));
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		this.setForeground(foreGroundColor);
@@ -183,9 +229,11 @@ public class AddFrame extends JDialog{
 	
 	/**
 	 * Beállítja a Háttér és betûszint a komponensnek
-	 * @param comp JComponent típus
-	 * @param backGround Color típus a háttérnek választott szín
-	 * @param foreGround Color típus a betûszínnek váalsztott szín
+	 * @param comp @JComponent típus
+	 * @param backGround @Color típus a háttérnek választott szín
+	 * @param foreGround @Color típus a betûszínnek váalsztott szín
+	 * @see JComponent
+	 * @see Color
 	 */
 	private void setBackAndForeGround(JComponent comp,Color backGround,Color foreGround) {
 		comp.setBackground(backGround);
@@ -195,10 +243,11 @@ public class AddFrame extends JDialog{
 	/**
 	 * Ha szerkesztésre lett létrehozva az ablak, akkor betölti a kiválasztott Dokumentum adatait
 	 * a megfelelõ mezõkbe
+	 * Ha null értékû a kiválasztott elem(vagyis nem lett kiválasztva elem),
+	 * akkor befejezi a mûveeletvégzést
 	 */
 	protected void loadValue() {
 		Document data = docTab.getSelectedRowData();
-		//Ha esetleg nem lenne adat
 		if(data == null) {
 			this.dispose();
 		}
@@ -219,7 +268,8 @@ public class AddFrame extends JDialog{
 	
 	/**
 	 *  Validáltatja a megadott adatokat és ha Valid akkor összeállítja a Felvételere küldendõ Dokumentumot
-	 * @return booelan Igaz a visszatérési értéke, ha sikeres volt a Dokumentum felvétele
+	 * @return @boolean típusú Igaz, ha a visszatérési értéke, ha sikeres volt a Dokumentum felvétele,
+	 * egyébként Hamis
 	 */
 	private boolean addDocumentToTable() {
 		try {
@@ -235,7 +285,8 @@ public class AddFrame extends JDialog{
 	
 	/**
 	 * Validáltatja a megadott adatokat és ha Valid akkor összeállítja a Szerkesztésre küldendõ Dokumentumot
-	 * @return boolean Igaz a visszatérési értéke, ha sikeres volt a Dokumentum szerkesztése
+	 * @return boolean típusú Igaz, ha a visszatérési értéke, ha sikeres volt a Dokumentum szerkesztése
+	 * egyébként Hamis
 	 */
 	private boolean updateDocumentAtTable() {
 		try {
@@ -252,7 +303,8 @@ public class AddFrame extends JDialog{
 	
 	/**
 	 * Visszaadja a Dialog mezõinek adataiból összeállított String-tömböt.
-	 * @return String[]
+	 * @return @String[] típusú tömb az adatokból.
+	 * @see @String
 	 */
 	private String[] createString() { 
 		String docname = name.getText();
@@ -266,6 +318,11 @@ public class AddFrame extends JDialog{
 		return result;
 	}
 	
+	/**
+	 * Validálja az ablak mezõinek értékét.
+	 * @throws @Exception típusú kivételt dob, ha valamelyik feltétel enm volt megfelelõ a validáláshoz.
+	 * @see Exception
+	 */
 	private void validateData() throws Exception {
 		DateLabelFormatter formatter = new DateLabelFormatter();
 		String[] validate = createString();
@@ -280,14 +337,19 @@ public class AddFrame extends JDialog{
 	/**
 	 * 
 	 * @author nagyerik99
-	 *
+	 * @InputVerifier extension
+	 * A megnevezés/azonosító mezõ validálására egy extension.
+	 * Levizsgálja, hogy a megadott id/név szerepel e már a modellben/táblában és
+	 * ha igen akkor gátolja a fájl/dokumentum mentésést
+	 * @see InputVerifier
 	 */
 	private class NameFieldVerifier extends InputVerifier{
+		private boolean result=false;
 
 		@Override
 		public boolean verify(JComponent input) {
 			JTextField id = (JTextField)input;
-			boolean result=false;
+			
 			if(!id.getText().isEmpty() && !id.getText().equals(oldID)) {
 				result = docTab.checkIDValidity(id.getText());
 				
@@ -295,7 +357,7 @@ public class AddFrame extends JDialog{
 				result = true;
 			}
 			
-			AddFrame.this.save.setEnabled(result);
+			save.setEnabled(result);
 			return result;
 		}
 		
@@ -303,9 +365,11 @@ public class AddFrame extends JDialog{
 	
 	/**
 	 * AddFrameButtons belsõ osztály amely implementálja az ActionListener Interface-t
+	 * @ActionListener  interfészt implementál.
 	 * A Mentés és a Mégse gombok megnyomása esetén hívódik az actionPerformed override-olt függvénye
 	 * Belsõ paraméterektõl függõen vagy Elment/Szerkeszt vagy Bezárja az Ablakot
 	 * @author nagyerik99
+	 * @see ActionListener
 	 *
 	 */
 	private class AddFrameButtons implements ActionListener{
