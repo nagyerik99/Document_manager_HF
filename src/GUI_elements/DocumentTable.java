@@ -6,6 +6,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 import javax.swing.JLabel;
 import javax.swing.JTable;
@@ -178,16 +179,35 @@ public class DocumentTable extends JTable {
     /**
      * A Modell tartalmát menti ki a felhasználó által meghatározott fájlba
      * aminek a kiterjesztése *.ser kell legyen.
+     * Ha szûrési feltétel van alkalmazva akkor az az alapjá megjelenõ elemek kerülnek kimentésre.
+     * @throws Exception ha üres modellt/szûrõt akarunk kiemnteni
      * Sikertelen mentés esetén azt dialoggal jelzi a mainFrame-nek aki pedig a felhasználónak.
      * @param savedFile a kimenteni kívánt fájl elérési útvonala
      */
     protected void saveData(String savedFile) {
     	try {
-    		tablemodel.saveFile(savedFile);
+    		ArrayList<String> saveAbleIDS = getVisibleData();
+    		if(saveAbleIDS.isEmpty()) throw new Exception("Üres szûrõ/modell!");
+    		
+    		tablemodel.saveFile(savedFile,saveAbleIDS);
     		mainFrame.showDialog("Sikeres mentés!","Fájl mentés","info");
-    	}catch(IOException e) {
+    	}catch(Exception e) {
     		mainFrame.showDialog(e.getMessage(),"Fájl Mentés","error");
     	}
+    }
+    
+    /**
+     * Visszaadja az éppen aktuálisan modellben lévõ elemek idjait a mentéshez.
+     * Ennek a segítségével lehet kimenteni a szûrési erdményként kapott Dokumentumokat
+     * @return a megjelnített id-k
+     */
+    private ArrayList<String> getVisibleData() {
+    	ArrayList<String> result = new ArrayList<String>();
+    	for(int i =0; i<this.getRowCount(); i++) {
+    		int rowID = this.convertRowIndexToModel(i);
+    		result.add(this.getModel().getValueAt(rowID,0).toString());
+    	}
+    	return result;
     }
     
     /**

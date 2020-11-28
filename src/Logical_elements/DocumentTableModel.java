@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -115,14 +116,21 @@ public class DocumentTableModel extends DefaultTableModel{
 	}
 	
 	/**
-	 * A Lista tartalmát tudjuk kimenteni a megadott fájlba
+	 * Az ids tömb paramétereivel megegyezõ mezõk/dokumentumok tartalmát tudjuk kimenteni a megadott fájlba
+	 * @param ids a modellben éppen aktuálisan levõ fájlok id-jai
 	 * @param savedFile a fájl absolutepath ja
 	 * @throws IOException  ha valmilyen oknál fogva nem sikerült volna a fájlba írás.
 	 */
-	public void saveFile(String savedFile) throws IOException {
+	public void saveFile(String savedFile,ArrayList<String> ids) throws IOException {
 		FileOutputStream save = new FileOutputStream(savedFile);
 		ObjectOutputStream data = new ObjectOutputStream(save);
-		data.writeObject(DocList);
+		HashMap<String,Document> saveAble = new HashMap<String,Document>();
+		for(String id : ids) {
+			if(DocList.containsKey(id)) {
+				saveAble.put(id, DocList.get(id));
+			}
+		}
+		data.writeObject(saveAble);
 		data.close();
 		save.close();
 	}

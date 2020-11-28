@@ -130,8 +130,13 @@ public class dbMenu extends JMenuBar implements ActionListener {
 			result = fileManager.showOpenDialog(dbMenu.this.getParent());
 			
 			if(result==JFileChooser.APPROVE_OPTION) {
-				String filename = fileManager.getSelectedFile().getAbsolutePath();
-				docTable.loadData(filename);
+				File selFile = fileManager.getSelectedFile();
+				if(selFile.getName().matches("(.+)\\.ser$")) {
+					docTable.loadData(selFile.getAbsolutePath());
+				}else {
+					mainFrame.showDialog("Nem megfelelõ a fájl formátuma!", "Fájl betöltése", "error");
+				}
+				
 			}
 			
 		}else if(e.getActionCommand().equals("helpDoc")) {

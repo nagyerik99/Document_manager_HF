@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import javax.swing.RowFilter;
 
 /**
- * 
- * @author nagye
+ * A Dokumentumok szûrõjét létrehozó/kezelõ függvény
+ * feladata az egyes paraméterek alapján létrehozni a szûrõt amelyet késõbb a tableModel
+ * szûrésénél alkalmazunk
+ * @author nagyerik99
  *
  */
 public class DocumentFilterer {
