@@ -14,6 +14,9 @@ import org.junit.Assert;
  * 
  */
 public class DocumentTableModelTest {
+	/**
+	 * Teszteléshez szükséges változók definiálása.
+	 */
 	Desktop d;
 	DocumentTableModel modell;
 	Document doc1,doc2,doc3,doc4;
@@ -34,7 +37,7 @@ public class DocumentTableModelTest {
 	}
 	
 	/**
-	 * addRow és removeSelectedRow vizsgálata
+	 * addRow és removeSelectedRow vizsgálata, hibamentes lefutást kellene megvalósítania.
 	 */
 	@Test
 	public void testAddRemoveRow() {
@@ -75,7 +78,7 @@ public class DocumentTableModelTest {
 	 * Sikeres szerkesztés vizsgálat
 	 * Ha létezõ indexel hívjuk meg az editRow függvényt
 	 * és az értékváltozás vizsgálata
-	 * @throws Exception nem létezõ index
+	 * @throws Exception nem létezõ index esetén
 	 */
 	@Test
 	public void testEditRow2() throws Exception{
@@ -94,7 +97,7 @@ public class DocumentTableModelTest {
 	
 	/**
 	 * Nemlétezõ Dokumentumindex-hez tartozó fájl megnyitása
-	 * Exception dobás
+	 * Exception dobás a várt kimenet
 	 * @throws Exception
 	 */
 	@Test(expected=Exception.class)
@@ -114,6 +117,7 @@ public class DocumentTableModelTest {
 	
 	/**
 	 * A fájl mentésének és betöltésének vizsgálata
+	 * Sikeres lefutást kell produkálnia.
 	 * @throws Exception
 	 */
 	@Test

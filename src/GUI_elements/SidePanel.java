@@ -20,9 +20,10 @@ public class SidePanel extends JPanel {
 	private static Color buttonForeGround = new Color(210,241,250),
 						 buttonBackGround =new Color(0,74,79);
 	/**
-	 * 
-	 * @param main
-	 * @param tab
+	 * SidePanel default konstruktora amely létrehozza a panelt a rajta található nyomógombokkal és azok funkcióival.
+	 * Beállítja a defualt GUI elemeket is.
+	 * @param main a Fõ Ablak mainFrame
+	 * @param tab az Adatokat tároló Tábla (DocumentTable)
 	 */
 	public SidePanel(DatabaseFrame main, DocumentTable tab) {
 		table = tab;
@@ -50,13 +51,13 @@ public class SidePanel extends JPanel {
 	}
 	
 	/**
-	 * 
-	 * @param button
-	 * @param backGround
-	 * @param foreGround
-	 * @param listener
-	 * @param ac
-	 * @param enabled
+	 * Beállítja a nyomógombokhoz tartozó default paramétereket, és tulajdonságokat.
+	 * @param button a nyomógomb
+	 * @param backGround a hozzá tartozó háttérszín
+	 * @param foreGround a hozzá tartozó betûszín
+	 * @param listener az ActionListener amely a nyomógomb megnyomását figyeli
+	 * @param ac actionCommand paraméter amely alapján beazonosítható mely gomb lett megnyomva.
+	 * @param enabled ha Igaz akkor alapértelmezett aktivált a nyomógomb, egyébként disabled.
 	 */
 	private void setButtonDefault(JButton button, Color backGround, Color foreGround, ActionListener listener, String ac, boolean enabled) {
 		button.setBackground(backGround);

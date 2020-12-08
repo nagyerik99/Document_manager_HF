@@ -103,7 +103,8 @@ public class DatabaseFrame extends JFrame{
 	}
 	
 	/**
-	 * 
+	 * Megjeleníti a kapott üzenetet a megfelelõ Dialógus formájában, hibaközlésre
+	 * illetve felhasználói értesítésre használatos.
 	 * @param messeage a megjelenítendõ üzenet
 	 * @param title a Dialog ablak neve
 	 * @param messeageType az üzenet típusa

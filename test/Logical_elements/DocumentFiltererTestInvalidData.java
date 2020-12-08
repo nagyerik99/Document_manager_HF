@@ -27,7 +27,7 @@ public class DocumentFiltererTestInvalidData {
 	}
 	
 	/**
-	 * Rossz dátum típusok, azért teszteltem õke külön mert paraméteresen az elsõ után exception miatt kilép.
+	 * Rossz dátum típusok, azért teszteltem õke külön mert paraméteresen az elsõ után EXCEPTION miatt kilép.
 	 * @throws Exception
 	 */
 	@Test(expected=Exception.class)

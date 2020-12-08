@@ -72,8 +72,8 @@ public class FilterPanel extends JPanel{
 	/**
 	 * Default konstruktor.
 	 * Létrehozza és inicializálja a szükséges elemket, a filtert, es formázza a panelt
-	 * @param main
-	 * @param table
+	 * @param main a Fõ ablak
+	 * @param table az adatokat tároló DocumentTable
 	 */
 	public FilterPanel(DatabaseFrame main,DocumentTable table) {
 		docTable = table;

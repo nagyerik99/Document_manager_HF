@@ -85,6 +85,10 @@ public class AddFrame extends JDialog{
 			buttonColor=new Color(0,74,79);
 	
 	/**
+	 * DatePicker formázás a megfelelõ formátumra
+	 */
+	private static DateLabelFormatter formatter;
+	/**
 	 * A JDialog típusú AddFrame osztály konstruktora
 	 * létrehozza a dialog ablakot és a hozzátartozó elemeket a meghatározott forma szerint.
 	 * @param main @Database_frame típúsú fõablak referenciája
@@ -144,11 +148,13 @@ public class AddFrame extends JDialog{
 		dateproperties.put("text.month", "Hónap");
 		dateproperties.put("text.year", "Év");
 		
+		formatter = new DateLabelFormatter();
+		
 		fromDatePanel = new JDatePanelImpl(fromDateModel, dateproperties);
-		fromDatePicker = new JDatePickerImpl(fromDatePanel,new DateLabelFormatter());
+		fromDatePicker = new JDatePickerImpl(fromDatePanel,formatter);
 		
 		toDatePanel = new JDatePanelImpl(toDateModel, dateproperties);
-		toDatePicker = new JDatePickerImpl(toDatePanel,new DateLabelFormatter());
+		toDatePicker = new JDatePickerImpl(toDatePanel,formatter);
 		
 		//FájlVálasztó init
 		fileChooser = new JFileChooser();
@@ -320,7 +326,7 @@ public class AddFrame extends JDialog{
 	
 	/**
 	 * Validálja az ablak mezõinek értékét.
-	 * @throws @Exception típusú kivételt dob, ha valamelyik feltétel enm volt megfelelõ a validáláshoz.
+	 * @throws @Exception típusú kivételt dob, ha valamelyik feltétel nem volt megfelelõ a validáláshoz.
 	 * @see Exception
 	 */
 	private void validateData() throws Exception {
@@ -340,7 +346,7 @@ public class AddFrame extends JDialog{
 	 * @InputVerifier extension
 	 * A megnevezés/azonosító mezõ validálására egy extension.
 	 * Levizsgálja, hogy a megadott id/név szerepel e már a modellben/táblában és
-	 * ha igen akkor gátolja a fájl/dokumentum mentésést
+	 * ha igen akkor gátolja a fájl/dokumentum mentését
 	 * @see InputVerifier
 	 */
 	private class NameFieldVerifier extends InputVerifier{

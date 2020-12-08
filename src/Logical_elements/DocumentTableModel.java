@@ -35,7 +35,7 @@ public class DocumentTableModel extends DefaultTableModel{
 	private static Object[] header = {"ID","Típus","Kezdete","Vége","Fájl"};
 	
 	/**
-	 * Default konstruktor ami létrehozza a modellt és inicializálja a Doclist-et
+	 * Default konstruktor ami létrehozza a modellt és inicializálja a Doclist-et, mely a Documentumocat tartalmazza
 	 */
 	public DocumentTableModel() {
 		super(header,0);

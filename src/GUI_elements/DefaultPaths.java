@@ -23,7 +23,7 @@ public enum DefaultPaths {
 	/**
 	 * Docuentáció neve/elérési útja
 	 */
-	Document("Dokumentációa.pdf"),
+	Document("Dokumentáció.pdf"),
 	/**
 	 * saveFile icon pathja
 	 */
@@ -48,7 +48,7 @@ public enum DefaultPaths {
 	
 	/**
 	 * Konstruktor ami beállítja az adott enum pathját.
-	 * @param value
+	 * @param value az elérési útvonal.
 	 */
 	DefaultPaths(String value) {
 		this.path=value;

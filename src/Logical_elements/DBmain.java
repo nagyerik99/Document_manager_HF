@@ -8,8 +8,12 @@ import GUI_elements.DatabaseFrame;
  *
  */
 public class DBmain {
+	/**
+	 * A DatabaseFrame objektum, melyet a program futtatáskor elindít
+	 */
+	private static DatabaseFrame dbFrame;
 	public static void main(String[] args) {
-		DatabaseFrame dbFrame =  new DatabaseFrame("Fájl Nyilvántartó");
+		dbFrame = new DatabaseFrame("Fájl Nyilvántartó");
 		dbFrame.setVisible(true);
 		
 	}
